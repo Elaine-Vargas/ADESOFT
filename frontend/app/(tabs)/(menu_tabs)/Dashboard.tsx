@@ -5,15 +5,15 @@ import React, { useEffect } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function NotFoundScreen() {
+export default function Dashboard() {
   useEffect(() => {
-    document.title = 'Adesoft - 404 ';
+    document.title = 'Adesoft - Dashboard';
   }, []); 
   return (
     <>
-      <Stack.Screen options={{ title: '404 Pestaña inexistente', headerShown: false }} />
+      <Stack.Screen options={{ title: 'Dashboard', headerShown: true }} />
       <ThemedView style={styles.container}>
-        <ThemedText type="title">Esta pestaña no existe</ThemedText>
+        <ThemedText type="title">Bienvenido al Dashboard</ThemedText>
         <Link href="/" style={styles.link}>
           <ThemedText type="link">Volver al Inicio</ThemedText>
         </Link>
