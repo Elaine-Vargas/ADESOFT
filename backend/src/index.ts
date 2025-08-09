@@ -29,7 +29,7 @@ app.use('/api/rutas', rutasRoutes);
 app.use('/api/zonas', zonasRoutes);
 app.use('/api/facturas', facturaRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

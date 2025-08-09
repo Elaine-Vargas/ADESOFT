@@ -30,7 +30,7 @@ app.use('/api/referencias-pago', referenciapago_routes_1.default);
 app.use('/api/rutas', rutas_routes_1.default);
 app.use('/api/zonas', zonas_routes_1.default);
 app.use('/api/facturas', factura_routes_1.default);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

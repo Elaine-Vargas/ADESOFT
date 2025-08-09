@@ -165,7 +165,7 @@ export const storage = {
 
   async getProductos(): Promise<Producto[]> {
     try {
-      const res = await fetch('http://localhost:3000/api/productos');
+      const res = await fetch('http://localhost:8080/api/productos');
       if (!res.ok) throw new Error('Backend error');
       const productos = await res.json();
       // Optionally update localStorage
