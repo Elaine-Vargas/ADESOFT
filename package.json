@@ -5,15 +5,19 @@
   "main": "index.js",
   "scripts": {
     "install-all": "npm install --omit=dev && cd backend && npm install --omit=dev && cd ../frontend && npm install --omit=dev",
-    "dev": "npx concurrently \"cd backend && npm start\" \"cd frontend && npx expo start\"",
-    "start": "npm run dev",
+    "dev": "npx concurrently --kill-others-on-fail \"cd backend && npm run dev\" \"cd frontend && npx expo start\"",
+    "start": "cd backend && npm start",
+    "build": "cd backend && npm install --omit=dev && npm run build",
     "backend": "cd backend && npm start",
     "frontend": "cd frontend && npx expo start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
