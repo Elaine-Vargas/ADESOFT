@@ -23,38 +23,34 @@ model Producto {
 }
 
 model Vendedor {
-  IdVendedor  String        @id @db.VarChar(6)
-  CedulaV     String?       @db.Char(13)
-  NombreV     String        @db.VarChar(50)
-  TelefonoV   String?       @db.Char(50)
-  IdRuta      String?       @db.VarChar(6)
-  FechaSinc   DateTime?     @db.Timestamp(0)
-  Cliente     Cliente[]
-  Orden       Orden[]
-  Transaccion Transaccion[]
+  IdVendedor String    @id @db.VarChar(6)
+  CedulaV    String?   @db.Char(13)
+  NombreV    String    @db.VarChar(50)
+  TelefonoV  String?   @db.Char(50)
+  IdRuta     String?   @db.VarChar(6)
+  FechaSinc  DateTime? @db.Timestamp(0)
+  Orden      Orden[]
 }
 
 model Cliente {
-  IdCliente     String        @id @db.VarChar(10)
-  NombreC       String        @db.VarChar(60)
-  Rnc           String?       @db.VarChar(15)
-  TelefonoC     String?       @db.Char(12)
-  DireccionC1   String?       @db.VarChar(60)
-  DireccionC2   String?       @db.VarChar(60)
-  ClienteExento Int?          @default(0) @db.TinyInt
-  BalanceC      Float?        @db.Float
-  IdVendedor    String?       @db.VarChar(6)
-  FechaSinc     DateTime?     @db.Timestamp(0)
-  Vendedor      Vendedor?     @relation(fields: [IdVendedor], references: [IdVendedor], onDelete: NoAction, onUpdate: NoAction, map: "Cliente_ibfk_1")
+  IdCliente     String    @id @db.VarChar(10)
+  NombreC       String    @db.VarChar(60)
+  Rnc           String?   @db.VarChar(15)
+  TelefonoC     String?   @db.VarChar(50)
+  DireccionC1   String?   @db.VarChar(60)
+  DireccionC2   String?   @db.VarChar(60)
+  ClienteExento Boolean?  @default(false)
+  BalanceC      Float?    @db.Float
+  IdVendedor    String?   @db.VarChar(6)
+  Ciudad        String?   @db.VarChar(50)
+  Idzona        String?   @db.VarChar(6)
+  Idruta        String?   @db.VarChar(6)
+  FechaSinc     DateTime? @db.Timestamp(0)
   Orden         Orden[]
-  Transaccion   Transaccion[]
-
-  @@index([IdVendedor], map: "IdVendedor")
 }
 
 model Orden {
   IdOrden       Int         @id @default(autoincrement())
-  Documento     String      @db.VarChar(10)
   Fecha         DateTime    @db.Date
   IdCliente     String      @db.VarChar(10)
   IdVendedor    String      @db.VarChar(6)
@@ -96,8 +92,6 @@ model Config {
   Rnc          String?       @db.VarChar(15)
   Email        String?       @db.VarChar(50)
   Impuesto     Float         @db.Float
-  OrdenNo      String?       @db.VarChar(10)
-  IngresoNo    String?       @db.VarChar(10)
   Logo         String?       @db.Text
   TipoImpuesto TipoImpuesto? @default(I)
 }
@@ -111,14 +105,17 @@ model Transaccion {
   IdCliente      String           @db.VarChar(10)
   IdVendedor     String           @db.VarChar(6)
   Valor          Float?           @default(0) @db.Float
+  Efectivo       Float?           @default(0) @db.Float
+  Tarjeta        Float?           @default(0) @db.Float
+  Cheque         Float?           @default(0) @db.Float
+  Transferencia  Float?           @default(0) @db.Float
   Pendiente      Float?           @default(0) @db.Float
   ValorImp       Float?           @default(0) @db.Float
   ReferenciaId   String?          @db.VarChar(10)
   Concepto       String?          @db.VarChar(100)
+  SECNCF         String?          @db.VarChar(20)
   FechaSinc      DateTime?        @db.Timestamp(0)
   ReferenciaPago ReferenciaPago[]
-  Cliente        Cliente          @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "Transaccion_ibfk_1")
-  Vendedor       Vendedor         @relation(fields: [IdVendedor], references: [IdVendedor], onDelete: NoAction, onUpdate: NoAction, map: "Transaccion_ibfk_2")
 
   @@index([IdCliente], map: "IdCliente")
   @@index([IdVendedor], map: "IdVendedor")
@@ -127,7 +124,7 @@ model Transaccion {
 model ReferenciaPago {
   IdReferencia Int         @id @default(autoincrement())
   IdTransa     Int
-  DocumentoIN  String?     @db.VarChar(10)
+  DocumentoIN  String      @unique(map: "DocumentoIN") @db.VarChar(10)
   DocumentoVE  String?     @db.VarChar(10)
   IdCliente    String?     @db.VarChar(10)
   IdVendedor   String?     @db.VarChar(6)
@@ -136,6 +133,16 @@ model ReferenciaPago {
   Transaccion  Transaccion @relation(fields: [IdTransa], references: [IdTransa], onDelete: NoAction, onUpdate: NoAction, map: "ReferenciaPago_ibfk_1")
 
   @@index([IdTransa], map: "IdTransa")
+}
+
+model Rutas {
+  Idruta String  @id @db.VarChar(6)
+  Ruta   String? @db.VarChar(50)
+}
+
+model Zonas {
+  Idzona String  @id @db.VarChar(6)
+  Zona   String? @db.VarChar(50)
 }
 
 enum Estado {

@@ -38,25 +38,30 @@ export const getProductoById = async (req: Request, res: Response) => {
 export const searchProductos = async (req: Request, res: Response) => {
   try {
     const {
+      q,
       CodigoP,
       ReferenciaP,
       PresentacionP,
       NombreP,
       GrupoP,
-      minPrecio,
-      maxPrecio
     } = req.query;
 
-    const where: any = {};
-    if (CodigoP) where.CodigoP = { contains: CodigoP };
-    if (ReferenciaP) where.ReferenciaP = { contains: ReferenciaP };
-    if (PresentacionP) where.PresentacionP = { contains: PresentacionP };
-    if (NombreP) where.NombreP = { contains: NombreP };
-    if (GrupoP) where.GrupoP = { contains: GrupoP };
-    if (minPrecio || maxPrecio) {
-      where.PrecioP = {};
-      if (minPrecio) where.PrecioP.gte = parseFloat(minPrecio as string);
-      if (maxPrecio) where.PrecioP.lte = parseFloat(maxPrecio as string);
+    let where: any = {};
+
+    if (q) {
+      where.OR = [
+        { NombreP: { contains: q as string } },
+        { CodigoP: { contains: q as string } },
+        { ReferenciaP: { contains: q as string } },
+        { PresentacionP: { contains: q as string } },
+        { GrupoP: { contains: q as string } },
+      ];
+    } else {
+      if (CodigoP) where.CodigoP = { contains: CodigoP };
+      if (ReferenciaP) where.ReferenciaP = { contains: ReferenciaP };
+      if (PresentacionP) where.PresentacionP = { contains: PresentacionP };
+      if (NombreP) where.NombreP = { contains: NombreP };
+      if (GrupoP) where.GrupoP = { contains: GrupoP };
     }
 
     const productos = await prisma.producto.findMany({ where });

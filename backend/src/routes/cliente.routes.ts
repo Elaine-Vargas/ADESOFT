@@ -13,11 +13,12 @@ const router = Router();
 // Get all clientes
 router.get('/', getAllClientes);
 
+// Dynamic search
+router.get('/search', searchClientes);
+
 // Get cliente by ID
 router.get('/:id', getClienteById);
 
-// Dynamic search
-router.get('/search', searchClientes);
 
 // Create cliente
 router.post('/', createCliente);

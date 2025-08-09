@@ -33,7 +33,7 @@ export const ThemedInput: React.FC<ThemedInputProps> = ({ icon, style, ...props 
   }, []);
 
   return (
-    <View style={[styles.inputWrapper, { backgroundColor, width: inputWrapperWidth as any }]}> 
+    <View style={[styles.inputWrapper, { width: inputWrapperWidth as any }, style]}> 
       <TextInput
         {...props}
         style={[

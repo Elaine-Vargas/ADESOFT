@@ -5,16 +5,21 @@ import {
   getVendedorById,
 //   createVendedor,
   updateVendedor,
-//   deleteVendedor
+//   deleteVendedor,
+  loginVendedor
 } from '../controllers/vendedor.controller';
 
 const router = Router();
+
 
 // Get all vendedores
 router.get('/', getAllVendedores);
 
 // Get vendedor by ID
 router.get('/:id', getVendedorById);
+
+// Login vendedor
+router.post('/login', loginVendedor);
 
 // Create vendedor
 // router.post('/', createVendedor);

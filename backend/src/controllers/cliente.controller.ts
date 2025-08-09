@@ -4,8 +4,18 @@ import { Request, Response } from 'express';
 
 // Get all clientes
 export const getAllClientes = async (req: Request, res: Response) => {
+  const { Idruta } = req.query;
+
   try {
-    const clientes = await prisma.cliente.findMany();
+    const whereClause: { Idruta?: string } = {};
+
+    if (Idruta && typeof Idruta === 'string' && Idruta.trim() !== '') {
+      whereClause.Idruta = Idruta;
+    }
+
+    const clientes = await prisma.cliente.findMany({
+      where: whereClause,
+    });
     res.json(clientes);
   } catch (error) {
     console.error(error);
@@ -37,24 +47,40 @@ export const searchClientes = async (req: Request, res: Response) => {
       NombreC,
       Rnc,
       TelefonoC,
-      DireccionC1,
-      DireccionC2,
       IdVendedor,
-      minBalance,
-      maxBalance
+      Idzona,
+      Idruta,
+      q,
     } = req.query;
 
-    const where: any = {};
-    if (NombreC) where.NombreC = { contains: NombreC };
-    if (Rnc) where.Rnc = { contains: Rnc };
-    if (TelefonoC) where.TelefonoC = { contains: TelefonoC };
-    if (DireccionC1) where.DireccionC1 = { contains: DireccionC1 };
-    if (DireccionC2) where.DireccionC2 = { contains: DireccionC2 };
-    if (IdVendedor) where.IdVendedor = IdVendedor;
-    if (minBalance || maxBalance) {
-      where.BalanceC = {};
-      if (minBalance) where.BalanceC.gte = parseFloat(minBalance as string);
-      if (maxBalance) where.BalanceC.lte = parseFloat(maxBalance as string);
+    let where: any = {};
+
+    // Agrupación de filtros: si ambos presentes, ambos se aplican (AND)
+    if (Idzona) {
+      where.Idzona = Idzona;
+    }
+    if (Idruta) {
+      where.Idruta = Idruta;
+    }
+
+    // Búsqueda dinámica para los demás campos
+    const dynamicOr: any[] = [];
+    if (q) {
+      dynamicOr.push(
+        { NombreC: { contains: q as string } },
+        { Rnc: { contains: q as string } },
+        { TelefonoC: { contains: q as string } },
+        { IdVendedor: { contains: q as string } }
+      );
+    } else {
+      if (NombreC) dynamicOr.push({ NombreC: { contains: NombreC as string } });
+      if (Rnc) dynamicOr.push({ Rnc: { contains: Rnc as string } });
+      if (TelefonoC) dynamicOr.push({ TelefonoC: { contains: TelefonoC as string } });
+      if (IdVendedor) dynamicOr.push({ IdVendedor: { contains: IdVendedor as string } });
+    }
+
+    if (dynamicOr.length > 0) {
+      where.OR = dynamicOr;
     }
 
     const clientes = await prisma.cliente.findMany({ where });

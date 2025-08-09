@@ -2,9 +2,9 @@ import { Router } from 'express';
 import {
   getAllConfigs,
   getConfigById,
-  searchConfigs,
-  createConfig,
-  updateConfig,
+  // searchConfigs,
+  // createConfig,
+  // updateConfig,
   // deleteConfig
 } from '../controllers/config.controller';
 
@@ -16,14 +16,14 @@ router.get('/', getAllConfigs);
 // Get config by ID
 router.get('/:id', getConfigById);
 
-// Dynamic search
-router.get('/search', searchConfigs);
+// // Dynamic search
+// router.get('/search', searchConfigs);
 
 // Create config
-router.post('/', createConfig);
+// router.post('/', createConfig);
 
-// Update config
-router.put('/:id', updateConfig);
+// // Update config
+// router.put('/:id', updateConfig);
 
 // router.delete('/:id', deleteConfig);
 

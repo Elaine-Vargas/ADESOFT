@@ -68,8 +68,24 @@ export const searchReferenciaPagos = async (req: Request, res: Response) => {
 export const createReferenciaPago = async (req: Request, res: Response) => {
   const data = req.body;
   try {
-    const newReferencia = await prisma.referenciaPago.create({ data });
-    res.status(201).json(newReferencia);
+    const result = await prisma.$transaction(async (tx) => {
+      // Crear la referencia de pago
+      const newReferencia = await tx.referenciaPago.create({ data });
+      // Obtener la transacción actual
+      const transaccion = await tx.transaccion.findUnique({ where: { IdTransa: data.IdTransa } });
+      if (!transaccion) throw new Error('Transacción no encontrada');
+      // Calcular nuevo pendiente
+      const pendienteActual = transaccion.Pendiente ?? transaccion.Valor ?? 0;
+      const valorPago = typeof data.ValorPago === 'number' ? data.ValorPago : parseFloat(data.ValorPago);
+      const nuevoPendiente = pendienteActual - valorPago;
+      // Actualizar pendiente
+      const transaccionActualizada = await tx.transaccion.update({
+        where: { IdTransa: data.IdTransa },
+        data: { Pendiente: nuevoPendiente }
+      });
+      return { newReferencia, transaccionActualizada };
+    });
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'ERROR DEL SERVIDOR' });

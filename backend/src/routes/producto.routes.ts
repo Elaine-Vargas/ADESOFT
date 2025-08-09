@@ -13,11 +13,12 @@ const router = Router();
 // Get all products
 router.get('/', getAllProductos);
 
+// Dynamic search
+router.get('/search', searchProductos);
+
 // Get product by ID
 router.get('/:id', getProductoById);
 
-// Dynamic search
-router.get('/search', searchProductos);
 
 // router.post('/', createProducto);
 router.put('/:id', updateProducto);

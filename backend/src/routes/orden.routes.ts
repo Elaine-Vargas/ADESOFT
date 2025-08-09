@@ -4,7 +4,9 @@ import {
   getOrdenById,
   searchOrdenes,
   createOrden,
+  createOrdenWithItems,
   updateOrden,
+  updateOrdenWithItems,
   // deleteOrden
 } from '../controllers/orden.controller';
 
@@ -22,8 +24,15 @@ router.get('/search', searchOrdenes);
 // Create orden
 router.post('/', createOrden);
 
+// Create orden with items
+router.post('/with-items', createOrdenWithItems);
+
+// Update orden with items
+router.put('/:id/with-items', updateOrdenWithItems);
+
 // Update orden
 router.put('/:id', updateOrden);
+
 
 // router.delete('/:id', deleteOrden);
 

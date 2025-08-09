@@ -1,5 +1,6 @@
 import prisma from '../prisma';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 // Get all vendedores
 export const getAllVendedores = async (req: Request, res: Response) => {
@@ -70,3 +71,42 @@ export const updateVendedor = async (req: Request, res: Response) => {
 //     res.status(500).json({ error: 'ERROR DEL SERVIDOR' });
 //   }
 // };
+
+
+// Login vendedor (adapted to Prisma schema)
+export const loginVendedor = async (req: Request, res: Response) => {
+  const { codigo } = req.body;
+  if (!codigo) {
+    return res.status(400).json({ message: 'Falta el campo "codigo" en el body.' });
+  }
+  try {
+    // Buscar vendedor por IdVendedor (el código)
+    const vendedor = await prisma.vendedor.findUnique({
+      where: { IdVendedor: codigo },
+    });
+    if (!vendedor) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    const token = jwt.sign(
+      {
+        IdVendedor: vendedor.IdVendedor,
+        NombreV: vendedor.NombreV,
+        CedulaV: vendedor.CedulaV,
+      },
+      process.env.JWT_SECRET || 'w3r9Gv!72JkpX%lQs@8bZ&hMfT0^nAy',
+      { expiresIn: '5m' }
+    );
+
+    console.log('Token generado:', token);
+
+    res.json({
+      mensaje: `Inicio de sesión exitoso, ¡Bienvenido/a ${vendedor.NombreV}!`,
+      vendedor, 
+      token    
+    });
+  } catch (error) {
+    console.error('Error en login:', error);
+    res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
+};
