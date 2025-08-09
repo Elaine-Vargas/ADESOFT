@@ -8,8 +8,12 @@
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-        "extra": {
-      "VITE_BACKEND_URL": "http://localhost:8080/api/"
+    "extra": {
+      "VITE_BACKEND_URL": "http://localhost:8080/api/",
+      "router": {},
+      "eas": {
+        "projectId": "7c787080-25d8-4751-8b60-0b25e031f690"
+      }
     },
     "ios": {
       "supportsTablet": true
@@ -40,6 +44,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "elamv"
   }
 }
