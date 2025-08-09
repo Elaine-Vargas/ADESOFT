@@ -4,7 +4,7 @@
   "description": "Root package for managing both frontend and backend",
   "main": "index.js",
   "scripts": {
-    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "install-all": "npm install --omit=dev && cd backend && npm install --omit=dev && cd ../frontend && npm install --omit=dev",
     "dev": "concurrently \"cd backend && npm start\" \"cd frontend && npx expo start\"",
     "start": "npm run dev",
     "backend": "cd backend && npm start",
