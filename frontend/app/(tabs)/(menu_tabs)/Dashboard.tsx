@@ -1103,8 +1103,8 @@ export default function Dashboard() {
             zIndex: 9999,
             justifyContent: 'center',
             alignItems: 'center',
+            pointerEvents: 'auto'
           }}
-          pointerEvents="auto" // Bloquea toques en lo de atrás
         >
           <ActivityIndicator size="large" color={themeAccent} />
         </View>
